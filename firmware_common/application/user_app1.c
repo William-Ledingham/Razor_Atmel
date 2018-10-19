@@ -88,6 +88,8 @@ Promises:
 void UserApp1Initialize(void)
 {
  
+  HEARTBEAT_OFF();
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -131,11 +133,32 @@ void UserApp1RunActiveState(void)
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
-
+#define COUNTER_LIMIT_MS (u32)500
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  static u32 u32Counter = 0;
+  static bool bLightIsOn = FALSE;
+  
+  /*Increment u32Counter every 1ms cycle*/
+  u32Counter++;
+  
+  /*check and roll over*/
+  if(u32Counter == COUNTER_LIMIT_MS)
+  {
+    u32Counter = 0;
+    
+    if(bLightIsOn)
+    {
+      HEARTBEAT_OFF();
+    }
+    else
+    {
+      HEARTBEAT_ON();
+    }
+    bLightIsOn = !bLightIsOn;
+  }
 
 } /* end UserApp1SM_Idle() */
     
