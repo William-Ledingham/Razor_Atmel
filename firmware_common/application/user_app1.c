@@ -87,6 +87,11 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  
+  LedPWM(LCD_RED, LED_PWM_100);
+  LedPWM(LCD_GREEN, LED_PWM_0);
+  LedPWM(LCD_BLUE, LED_PWM_0);
+
  
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -136,7 +141,64 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  
+  static LedNumberType aeCurrentLed[] = {LCD_GREEN, LCD_RED, LCD_BLUE, LCD_GREEN, LCD_RED, LCD_BLUE};
+  static bool abLedRateIncreasing[] = {TRUE,      FALSE,   TRUE,     FALSE,     TRUE,    FALSE};
+  
+  static u8 u8CurrentLedIndex = 0;
+  static u8 u8LedCurrentLevel = 0;
+  static u8 u8DutyCycleCounter = 0;
+  static u16 u16Counter = COLOR_CYCLE_TIME;
+  
+  static bool bCyclingOn = TRUE;
+  
+  if(bCyclingOn)
+  {
+    u16Counter--;
+  }
+  
+  u16Counter--;
+  
+  if(u16Counter == 0)
+  {
+    u16Counter = COLOR_CYCLE_TIME;
+    
+    if( abLedRateIncreasing[u8CurrentLedIndex])
+    {
+      u8LedCurrentLevel++;
+    }
+    else
+    {
+      u8LedCurrentLevel--;
+    }
+    
+    u8DutyCycleCounter++;
+    if(u8DutyCycleCounter == 20)
+    {
+      u8DutyCycleCounter = 0;
+      
+      u8CurrentLedIndex++;
+      if(u8CurrentLedIndex == sizeof(aeCurrentLed))
+      {
+        u8CurrentLedIndex = 0;
+      }
+      
+      u8LedCurrentLevel = 20;
+      if(abLedRateIncreasing[u8CurrentLedIndex])
+      {
+        u8LedCurrentLevel = 0;
+      }
+    }
+    
+    if(WasButtonPressed(BUTTON0))
+    {
+      
+    }
+    
+    
+    LedPWM( (LedNumberType)aeCurrentLed[u8CurrentLedIndex], (LedRateType)u8LedCurrentLevel);
+  }
+  
 } /* end UserApp1SM_Idle() */
     
 
