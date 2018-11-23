@@ -31,6 +31,8 @@ G_au8DebugScanfBuffer[] is the DebugScanf() input buffer that can be read direct
 G_u8DebugScanfCharCount holds number of characters in Debug_au8ScanfBuffer
 Both of these variables are cleared whenever DebugScanf() is called.
 
+
+
 Constants:
 DEBUG_SCANF_BUFFER_SIZE is the size of G_au8DebugScanfBuffer and thus the max of G_u8DebugScanfCharCount
 
@@ -98,6 +100,9 @@ extern u8 G_au8MessageOK[];                              /* From utilities.c */
 extern u8 G_au8MessageFAIL[];                            /* From utilities.c */
 extern u8 G_au8MessageON[];                              /* From utilities.c */
 extern u8 G_au8MessageOFF[];                             /* From utilities.c */
+
+extern u8 G_au8DebugScanfBuffer[];
+extern u8 G_u8DebugScanfCharCount;
 
 
 /***********************************************************************************************************************
