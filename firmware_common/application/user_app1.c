@@ -57,6 +57,9 @@ extern volatile u32 G_u32SystemTime1s;                 /* From board-specific so
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
+static u8 UserApp_au8MyName[] = "William";
+static u8 UserApp_CursorPosition;
+
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
@@ -88,6 +91,18 @@ Promises:
 void UserApp1Initialize(void)
 {
  
+  LCDCommand(LCD_CLEAR_CMD);
+  
+  LCDMessage(LINE1_START_ADDR, UserApp_au8MyName);
+  LCDMessage(LINE2_START_ADDR, "0");
+  LCDMessage(LINE2_START_ADDR + 6, "1");
+  LCDMessage(LINE2_START_ADDR + 13, "2");
+  LCDMessage(LINE2_END_ADDR, "3");
+
+  LCDCommand(LCD_HOME_CMD);
+  
+  UserApp_CursorPosition = LINE1_START_ADDR;
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,6 +152,66 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
 
+  static bool bCursorOn = FALSE;
+  
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    
+    if(bCursorOn)
+    {
+      /*Cursor is on, so turn it off */
+      LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
+      bCursorOn = FALSE;
+    }
+    else
+    {
+      /* Cursor is off, so turn it on */
+      LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
+      bCursorOn = TRUE;
+    }
+  }
+  
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    
+    if(UserApp_CursorPosition == LINE1_END_ADDR)
+    {
+      UserApp_CursorPosition = LINE2_START_ADDR;
+    }
+    else if(UserApp_CursorPosition == LINE2_END_ADDR)
+    {
+      UserApp_CursorPosition = LINE1_START_ADDR;
+    }
+    else
+    {
+      UserApp_CursorPosition++;
+    }
+    
+    LCDCommand(LCD_ADDRESS_CMD | UserApp_CursorPosition);
+  }
+  
+  if(WasButtonPressed(BUTTON2))
+  {
+    ButtonAcknowledge(BUTTON2);
+    
+    if(UserApp_CursorPosition == LINE2_START_ADDR)
+    {
+      UserApp_CursorPosition = LINE1_END_ADDR;
+    }
+    else if(UserApp_CursorPosition == LINE1_START_ADDR)
+    {
+      UserApp_CursorPosition = LINE2_END_ADDR;
+    }
+    else
+    {
+      UserApp_CursorPosition--;
+    }
+    
+    LCDCommand(LCD_ADDRESS_CMD | UserApp_CursorPosition);
+  }
+  
 } /* end UserApp1SM_Idle() */
     
 
