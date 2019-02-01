@@ -208,6 +208,50 @@ static void UserApp1SM_AntChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
+  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0};
+  u8 au8DataContent[] = "xxxxxxxxxxxxxx";
+  
+ if( AntReadAppMessageBuffer() )
+  {
+     /* New message from ANT task: check what it is */
+    if(G_eAntApiCurrentMessageClass == ANT_DATA)
+    {
+      /* we got some data: parse it into au8DataContent */
+      for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+      {
+        au8DataContent[2 * i]     = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] / 16);
+        au8DataContent[2 * i + 1] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] % 16);
+      }
+      LCDMessage( LINE2_START_ADDR, au8DataContent);
+    }
+    else if(G_eAntApiCurrentMessageClass == ANT_TICK)
+    {
+          /* Update and queue the new message data */
+      au8TestMessage[7]++;
+      if(au8TestMessage[7] == 0)
+      {
+        au8TestMessage[6]++;
+        if(au8TestMessage[6] == 0)
+        {
+          au8TestMessage[5]++;
+        }
+      }
+      au8TestMessage[0] = 0x00;
+      if( IsButtonPressed(BUTTON0) )
+      {
+        au8TestMessage[0] = 0xff;
+      }
+      au8TestMessage[1] = 0x00;
+      if( IsButtonPressed(BUTTON1) )
+      {
+        au8TestMessage[1] = 0xff;
+      }
+      AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, au8TestMessage);
+    }
+  } /* end AntReadAppMessageBuffer() */
+  
+  
+  
 
 } /* end UserApp1SM_Idle() */
     
