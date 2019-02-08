@@ -106,7 +106,7 @@
         <expressions>
           
           
-        <item>G_u32SystemTime1ms</item><item>G_u8DebugScanfCharCount</item><item>G_au8AntApiCurrentData</item><item></item></expressions>
+        <item>G_u32SystemTime1ms</item><item>G_u8DebugScanfCharCount</item><item>G_au8AntApiCurrentData</item><item/></expressions>
         <col-names>
           
           
@@ -123,7 +123,7 @@
       <WATCH_4>
         <expressions>
           
-        <item></item></expressions>
+        <item/></expressions>
         <col-names>
           
           
