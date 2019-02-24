@@ -277,7 +277,7 @@ static void UserAppSM_ChannelOpen(void)
         
 
         /* Check for a special packet and respond */
-        if(G_au8AntApiCurrentMessageBytes[0] == 0xA5)
+        if(G_au8AntApiCurrentMessageBytes[7] == 0xA5)
         {
           LedOff(LCD_RED);
           LedOff(LCD_GREEN);
