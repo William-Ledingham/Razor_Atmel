@@ -264,6 +264,17 @@ static void UserAppSM_ChannelOpen(void)
         LCDMessage(LINE2_START_ADDR, au8DataContent);
         
         /*update our local message counter and send the message back*/
+
+        if(WasButtonPressed(BUTTON3))
+        {
+          ButtonAcknowledge(BUTTON3);
+          au8TestMessage[0] = 0xFF;
+        }
+        else
+        {
+          au8TestMessage[0] = 0x00;
+        }
+    
         au8TestMessage[7]++;
         if(au8TestMessage[7] == 0)
         {
