@@ -36,7 +36,7 @@ Constants / Definitions
 #define ANT_DEVICE_TYPE_USERAPP         (u8)0        
 #define ANT_TRANSMISSION_TYPE_USERAPP   (u8)0             
 #define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x00       
-#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x20      
+#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x10      
 #define ANT_FREQUENCY_USERAPP           (u8)50           
 #define ANT_TX_POWER_USERAPP            RADIO_TX_POWER_4DBM 
 

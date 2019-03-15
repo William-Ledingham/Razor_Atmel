@@ -260,8 +260,37 @@ static void UserAppSM_ChannelOpen(void)
       if(bGotNewData)
       {
         /*we got a new data: show on LCD */
+        u8 au8Lifes[20];
+        au8Lifes[0] = 'L';
+        au8Lifes[1] = 'i';
+        au8Lifes[2] = 'v';
+        au8Lifes[3] = 'e';
+        au8Lifes[4] = 's';
+        au8Lifes[5] = ':';
+        au8Lifes[6] = ' ';
+        au8Lifes[7] = au8DataContent[15];
+        au8Lifes[8] = '\0';        
+        
         LCDClearChars(LINE2_START_ADDR, 20);
-        LCDMessage(LINE2_START_ADDR, au8DataContent);
+        LCDMessage(LINE2_START_ADDR, au8Lifes);
+        
+        
+        u8 au8Score[20];
+        au8Score[0] = 'S';
+        au8Score[1] = 'c';
+        au8Score[2] = 'o';
+        au8Score[3] = 'r';
+        au8Score[4] = 'e';
+        au8Score[5] = ':';
+        au8Score[6] = ' ';
+        au8Score[7] = au8DataContent[12];
+        au8Score[8] = au8DataContent[13];
+        au8Score[9] = '\0';
+         LCDClearChars(LINE1_START_ADDR, 20);
+        LCDMessage(LINE1_START_ADDR, au8Score);       
+
+
+                        
         
         /*update our local message counter and send the message back*/
 
